@@ -8,16 +8,11 @@ async function getSalesData() {
     _sum: { pricePaidInCents: true },
     _count: true
   })
-  await wait(2000)
-
+  
   return {
     amount: ((await data)._sum.pricePaidInCents || 0) / 100,
     numberOfSales: (await data)._count
   }
-}
-
-function wait(duration: number) {
-  return new Promise(resolve => setTimeout(resolve, duration))
 }
 
 async function getUserData() {
