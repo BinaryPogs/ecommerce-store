@@ -13,7 +13,7 @@ export function ProductForm() {
     return <form action={addProduct} className="space-y-8">
         <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input type="text" id="name" name="name" required/>
+            <Input type="text" id="name" name="name" required />
         </div>
         <div className="space-y-2">
             <Label htmlFor="priceInCents">Price In Cents</Label>
@@ -29,7 +29,7 @@ export function ProductForm() {
         </div>
         <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="name" required />
+            <Textarea id="description" name="description" required />
         </div>
         <div className="space-y-2">
             <Label htmlFor="file">File</Label>
