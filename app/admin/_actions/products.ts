@@ -3,7 +3,7 @@
 import { z } from "zod"
 import fs from "fs/promises"
 import db from "@/database/db";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 const fileSchema = z.instanceof(File, { message: "Required" })
 const imageSchema = fileSchema.refine(
@@ -18,11 +18,9 @@ const addSchema = z.object({
     image: imageSchema.refine(file => file.size > 0, "Required"),
   })
 
-export async function addProduct(formData: FormData) {
-    console.log(formData)
+export async function addProduct(prevState: unknown, formData: FormData) {
     const result = addSchema.safeParse(Object.fromEntries(formData.entries()))
     if (result.success === false) {
-        console.log(result.success)
       return result.error.formErrors.fieldErrors
     }
   
@@ -51,4 +49,21 @@ export async function addProduct(formData: FormData) {
     })
     
     redirect("/admin/products")
+}
+
+export async function toggleProductAvailability(id: string, isAvailableForPurchase: boolean) {
+  await db.product.update({
+    where: { id }, data: {
+      isAvailableForPurchase
+    }
+  })
+}
+
+
+export async function deleteProduct(id: string) {
+  const product = await db.product.delete({ where: { id } })
+  if (product == null) return notFound()
+  
+  await fs.unlink(product.filePath)
+  await fs.unlink(`public${product.imagePath}`)
 }
